@@ -852,24 +852,62 @@ vector<string> generateValidMoves(ll white_men,ll white_kings,ll black_men,ll bl
 	}
 	return valid;
 }
+void drawCheck(ll &white_men,ll &white_kings,ll &black_men,ll &black_kings,ll &two_pc_draw,ll &three_pc_draw,vector<vector<ll>> &history,bool &repetition){
+	ll wkcnt=0,wmcnt=0,bmcnt=0,bkcnt=0;
+	for(ll sq=1;sq<=50;sq++){
+		if(white_men&(1LL<<sq)){
+			wmcnt++;
+		}
+		if(white_kings&(1LL<<sq)){
+			wkcnt++;
+		}
+		if(black_men&(1LL<<sq)){
+			bmcnt++;
+		}
+		if(black_kings&(1LL<<sq)){
+			bkcnt++;
+		}
+	}
+	if((wmcnt==0 && wkcnt==1 && bkcnt>=1 && ((bmcnt+bkcnt)<=2))||(bmcnt==0 && bkcnt==1 && wkcnt>=1 && ((wmcnt+wkcnt)<=2))){
+		two_pc_draw++;
+	}
+	else{
+		two_pc_draw=0;
+	}
+	if((wmcnt==0 && wkcnt==1 && bkcnt>=1 && ((bmcnt+bkcnt)<=3))||(bmcnt==0 && bkcnt==1 && wkcnt>=1 && ((wmcnt+wkcnt)<=3))){
+		three_pc_draw++;
+	}
+	else{
+		three_pc_draw=0;
+	}
+	ll cnt=0;
+	for(size_t i=0;i<history.size();i++){
+		if(history[i]==history[((ll)history.size())-1]){
+			cnt++;
+		}
+	}
+	if(cnt==3){
+		repetition=true;
+	}
+}
 float eval(ll white_men,ll white_kings,ll black_men,ll black_kings,string turn,ll depth){
-	if(depth==6){
+	if(depth==8){
 		float posValue=0;
 		for(ll sq=1;sq<=50;sq++){
-			if(white_men&(1LL<<sq)){
+			if(white_men&(1<<sq)){
 				posValue+=1;
 			}
-			if(white_kings&(1LL<<sq)){
+			if(white_kings&(1<<sq)){
 				posValue+=3.5;
 			}
-			if(black_men&(1LL<<sq)){
+			if(black_men&(1<<sq)){
 				posValue-=1;
 			}
-			if(black_kings&(1LL<<sq)){
+			if(black_kings&(1<<sq)){
 				posValue-=3.5;
 			}
+			return posValue;
 		}
-		return posValue;
 	}
 	float ans;
 	if(turn=="w"){
@@ -928,7 +966,9 @@ string engine(ll white_men,ll white_kings,ll black_men,ll black_kings,string tur
 int main(){
 	ll white_men=2251797666201600,white_kings=0,black_men=2097151,black_kings=0;
 	string humanColor,engineColor;
-	ll kingStreak=0;
+	ll kingStreak=0,two_pc_draw=0,three_pc_draw=0;
+	bool repetition=false;
+	vector<vector<ll>> history;
 	while(true){
 		cout<<"Enter color (w/b): ";
 		getline(cin,humanColor);
@@ -954,7 +994,9 @@ int main(){
 			string engineMove=engine(white_men,white_kings,black_men,black_kings,engineColor,validMoves);
 			cout<<engineMove<<"\n";
 			playMove(engineMove,white_men,white_kings,black_men,black_kings,kingStreak);
-			if(kingStreak==50){
+			history.push_back({white_men,white_kings,black_men,black_kings,1});
+			drawCheck(white_men,white_kings,black_men,black_kings,two_pc_draw,three_pc_draw,history,repetition);
+			if((kingStreak==50) || (two_pc_draw==10) || (three_pc_draw==32) || repetition){
 				cout<<"Draw!\n";
 				break;
 			}
@@ -971,7 +1013,14 @@ int main(){
 	        continue;
 	    }
 		playMove(move,white_men,white_kings,black_men,black_kings,kingStreak);
-		if(kingStreak==50){
+		if(humanColor=="w"){
+			history.push_back({white_men,white_kings,black_men,black_kings,1});
+		}
+		else{
+			history.push_back({white_men,white_kings,black_men,black_kings,0});
+		}
+		drawCheck(white_men,white_kings,black_men,black_kings,two_pc_draw,three_pc_draw,history,repetition);
+		if((kingStreak==50) || (two_pc_draw==10) || (three_pc_draw==32) || repetition){
 			cout<<"Draw!\n";
 			break;
 		}
@@ -984,7 +1033,9 @@ int main(){
 			string engineMove=engine(white_men,white_kings,black_men,black_kings,engineColor,validMoves);	
 			cout<<engineMove<<"\n";
 			playMove(engineMove,white_men,white_kings,black_men,black_kings,kingStreak);
-			if(kingStreak==50){
+			history.push_back({white_men,white_kings,black_men,black_kings,0});
+			drawCheck(white_men,white_kings,black_men,black_kings,two_pc_draw,three_pc_draw,history,repetition);
+			if((kingStreak==50) || (two_pc_draw==10) || (three_pc_draw==32) || repetition){
 				cout<<"Draw!\n";
 				break;
 			}
