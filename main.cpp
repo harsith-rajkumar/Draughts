@@ -906,8 +906,8 @@ float eval(ll white_men,ll white_kings,ll black_men,ll black_kings,string turn,l
 			if(black_kings&(1LL<<sq)){
 				posValue-=3.5;
 			}
-			return posValue;
 		}
+		return posValue;
 	}
 	float ans;
 	if(turn=="w"){
