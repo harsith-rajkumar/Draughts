@@ -894,16 +894,16 @@ float eval(ll white_men,ll white_kings,ll black_men,ll black_kings,string turn,l
 	if(depth==8){
 		float posValue=0;
 		for(ll sq=1;sq<=50;sq++){
-			if(white_men&(1<<sq)){
+			if(white_men&(1LL<<sq)){
 				posValue+=1;
 			}
-			if(white_kings&(1<<sq)){
+			if(white_kings&(1LL<<sq)){
 				posValue+=3.5;
 			}
-			if(black_men&(1<<sq)){
+			if(black_men&(1LL<<sq)){
 				posValue-=1;
 			}
-			if(black_kings&(1<<sq)){
+			if(black_kings&(1LL<<sq)){
 				posValue-=3.5;
 			}
 			return posValue;
