@@ -891,7 +891,7 @@ void drawCheck(ll &white_men,ll &white_kings,ll &black_men,ll &black_kings,ll &t
 	}
 }
 float eval(ll white_men,ll white_kings,ll black_men,ll black_kings,string turn,ll depth){
-	if(depth==8){
+	if(depth==6){
 		float posValue=0;
 		for(ll sq=1;sq<=50;sq++){
 			if(white_men&(1LL<<sq)){
