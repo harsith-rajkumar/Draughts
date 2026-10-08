@@ -930,6 +930,9 @@ float eval(ll white_men,ll white_kings,ll black_men,ll black_kings,string turn,l
 	return ans;
 }
 string engine(ll white_men,ll white_kings,ll black_men,ll black_kings,string turn,vector<string> validMoves){
+	if(validMoves.size()==1){
+		return validMoves[0];
+	}
 	float best;
 	ll bestMoveIndex=0;
 	if(turn=="w"){
