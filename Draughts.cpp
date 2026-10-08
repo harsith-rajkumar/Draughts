@@ -1006,12 +1006,16 @@ int main(){
 			cout<<"You lost!\n";
 			break;
 		}
-	    cout<<"Enter move: ";
-	    getline(cin,move);
-		if(count(validMoves.begin(),validMoves.end(),move)==0){
-	        cout<<"Illegal move!\n";
-	        continue;
-	    }
+        while(true){
+            cout<<"Enter move: ";
+	        getline(cin,move);
+            if(count(validMoves.begin(),validMoves.end(),move)==0){
+                cout<<"Illegal move!\n";
+            }
+            else{
+                break;
+            }
+        }
 		playMove(move,white_men,white_kings,black_men,black_kings,kingStreak);
 		if(humanColor=="w"){
 			history.push_back({white_men,white_kings,black_men,black_kings,1});
